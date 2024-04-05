@@ -1,0 +1,14 @@
+harish $ pwd
+work/web-chat-client-server
+harish $ go mod init github.com/pillaiharish/web-chat-client-server
+go: creating new go.mod: module github.com/pillaiharish/web-chat-client-server
+harish $ ls
+go.mod		
+harish $ vi main.go
+harish $ ls
+go.mod	    main.go
+harish $ go run main.go 
+Hello, World!
+harish $ go build
+harish $ go run main.go 
+Hello, World!

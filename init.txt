@@ -12,3 +12,6 @@ Hello, World!
 harish $ go build
 harish $ go run main.go 
 Hello, World!
+harish $ git init
+Initialized empty Git repository in work/web-chat-client-server/.git/
+harish $ git add .

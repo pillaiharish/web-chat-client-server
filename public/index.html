@@ -20,9 +20,14 @@
 
     <script>
         var ws = new WebSocket("ws://192.168.0.148:8000/ws");
+        var myUsername;
 
         ws.onmessage = function(event) {
             var message = JSON.parse(event.data);
+            if (message.username && !myUsername){
+                myUsername = message.username;
+                return;
+            }
             displayMessage(message);
         };
 
@@ -33,10 +38,11 @@
         function sendMessage() {
             var input = document.getElementById("messageInput");
             var message = {
-                email: "user@example.com", // Static for this example, replace with dynamic data if needed
-                username: "User", // Static for this example, replace with dynamic data if needed
-                message: input.value
+                message: input.value // As of now we are using this to get message from UI
             };
+            if (myUsername){
+                message.username = myUsername;
+            }
             ws.send(JSON.stringify(message));
             input.value = '';
         }

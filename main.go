@@ -3,16 +3,22 @@ package main
 import (
 	"log"
 	"net/http"
+	"strconv"
+	"sync/atomic"
 
 	"github.com/gorilla/websocket"
 )
 
 // Message object to store details
+// if plan to integrate user authentication or identification later, this field could become relevant
 type Message struct {
 	Email    string `json:"email"`
 	Username string `json:"username"`
 	Message  string `json:"message"`
 }
+
+// retain the counter for websocket connection
+var idCounter int64
 
 // keep track of connected clients
 var clients = make(map[*websocket.Conn]bool)
@@ -33,6 +39,12 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 	}
 
 	defer ws.Close()
+
+	// generate a uniqueID for the client and  increment it by 1
+	clientId := atomic.AddInt64(&idCounter, 1)
+
+	// Send the unique ID back to the client
+	ws.WriteJSON(Message{Username: strconv.FormatInt(clientId, 10)})
 
 	// register our new client
 	clients[ws] = true

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Chat Client</title>
+    <style>
+        #chat {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat"></div>
+    <input type="text" id="messageInput" placeholder="Enter message">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        var ws = new WebSocket("ws://192.168.0.148:8000/ws");
+
+        ws.onmessage = function(event) {
+            var message = JSON.parse(event.data);
+            displayMessage(message);
+        };
+
+        ws.onerror = function(event) {
+            console.error("WebSocket error:", event);
+        };
+
+        function sendMessage() {
+            var input = document.getElementById("messageInput");
+            var message = {
+                email: "user@example.com", // Static for this example, replace with dynamic data if needed
+                username: "User", // Static for this example, replace with dynamic data if needed
+                message: input.value
+            };
+            ws.send(JSON.stringify(message));
+            input.value = '';
+        }
+
+        function displayMessage(message) {
+            var chat = document.getElementById("chat");
+            var msgDiv = document.createElement("div");
+            msgDiv.textContent = message.username + ": " + message.message;
+            chat.appendChild(msgDiv);
+            chat.scrollTop = chat.scrollHeight; // Scroll to bottom
+        }
+    </script>
+</body>
+</html>
